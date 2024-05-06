@@ -385,12 +385,6 @@
         <!-- End Modals-->
 
         {{-- ajout service --}}
-        {{-- Filtre  --}}
-        @foreach ($liste_categorie as $filtre)
-                <select>
-                    <option><a href="{{ route('filtre',['categorie'=>$filtre]) }}"></a></option>
-                </select>
-        @endforeach
 
 
         <!-- /. NAV SIDE  -->
@@ -410,6 +404,24 @@
                         </div>
                     </div>
                 </div>
+                {{-- Filtre  --}}
+                <style>
+                    #filtre_seance{
+                        margin-left: 93%;
+                        margin-top: -3%;
+                    }
+                </style>
+
+                <div class="btn-group" id="filtre_seance">
+                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle">Categories <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        @foreach ($liste_categorie as $filtre)
+                      <li><a href="{{ route('filtre_Liste_Seance', ['categorie' => $filtre->categorie]) }}">{{ $filtre->categorie }}</a></li>
+                      <li class="divider"></li>
+                      @endforeach
+                    </ul>
+                  </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Advanced Tables -->

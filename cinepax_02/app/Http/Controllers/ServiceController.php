@@ -44,18 +44,7 @@ class ServiceController extends BaseController
 
         if (empty($idfilm) || empty($idsalle) || empty($idseance) || empty($numseance) || empty($dates) || empty($heure)) {
             $nombre_afficher = 5;
-            $data = DB::select("
-            select
-            idseance,
-            numseance,
-            nom_salle,
-            nom_film,
-            categorie_film,
-            dates,
-            heure
-            from v_getseance
-            limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
-
+            $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
             $film = $service->getAll_Film();
             $salle = $service->getAll_Salle();
             $categorie = $service->getAll_Categorie_Film();
@@ -67,26 +56,13 @@ class ServiceController extends BaseController
         } else {
             $service->update_seance($idseance, $numseance, $idsalle, $idfilm, $dates, $heure);
             $nombre_afficher = 5;
-            $data = DB::select("
-            select
-            idseance,
-            numseance,
-            nom_salle,
-            nom_film,
-            categorie_film,
-            dates,
-            heure
-            from v_getseance
-            limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
-
+            $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
             $film = $service->getAll_Film();
             $salle = $service->getAll_Salle();
             $categorie = $service->getAll_Categorie_Film();
 
             return view('diffusion/update_seance/update_seance', ["list_categorie" => $categorie, "list_salle" => $salle, "list_film" => $film, "list_seance" => $data, "currentPage" => $numero_page, "totalPages" => $nombre_afficher]);
-
         }
-
     }
     public function update_seance(Request $request)
     {
@@ -94,16 +70,7 @@ class ServiceController extends BaseController
         $numero_page = $request->input('page') ?? 1;
         $nombre_afficher = 5;
         $data = DB::select("
-        select
-        idseance,
-        numseance,
-        nom_salle,
-        nom_film,
-        categorie_film,
-        dates,
-        heure
-        from v_getseance
-        limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+        select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
 
         $film = $service->getAll_Film();
         $salle = $service->getAll_Salle();
@@ -117,15 +84,7 @@ class ServiceController extends BaseController
         $message = '';
         $numero_page = $request->input('page') ?? 1;
         $nombre_afficher = 5;
-        $data = DB::select("select
-        numseance,
-        nom_salle,
-        nom_film,
-        categorie_film,
-        dates,
-        heure
-        from v_getseance
-        limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+        $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
         if(session('message')){
             $message=session('message');
         }
@@ -144,6 +103,21 @@ class ServiceController extends BaseController
 
         return view('diffusion/statistiques', ['vente'=>$data_vente,'labels' => $nouvellesLabels, 'donnees' => $nouvellesDonnees, 'couleurs' => $nouvellesCouleurs]);
     }
+    public function filtre_Liste_Seance(Request $request)
+    {
+        $categorie = $request->input('categorie');
+        $service = new Service();
+        $message = '';
+        $numero_page = $request->input('page') ?? 1;
+        $nombre_afficher = 5;
+        $data = DB::select("select * from v_getseance where categorie_film = ? limit ? OFFSET (?-1) * ?", [$categorie,$nombre_afficher, $numero_page, $nombre_afficher]);
+        if(session('message')){
+            $message=session('message');
+        }
+        $liste_categorie = $service->getCategorie_film();
+
+        return view('diffusion/liste_seance', ["liste_categorie"=>$liste_categorie,"message"=>$message,"list_seance" => $data, "currentPage" => $numero_page, "totalPages" => $nombre_afficher]);
+    }
 
     public function delete_Valid_seance(Request $request)
     {
@@ -154,16 +128,7 @@ class ServiceController extends BaseController
         $numero_page = $request->input('page') ?? 1;
         $nombre_afficher = 5;
         $data = DB::select("
-        select
-        idseance,
-        numseance,
-        nom_salle,
-        nom_film,
-        categorie_film,
-        dates,
-        heure
-        from v_getseance
-        limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+        select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
 
         $film = $service->getAll_Film();
         $salle = $service->getAll_Salle();
@@ -188,16 +153,7 @@ class ServiceController extends BaseController
         if (empty($numero) || empty($idsalle) || empty($idfilm) || empty($dates) || empty($heure)) {
             $numero_page = $request->input('page') ?? 1;
             $nombre_afficher = 5;
-            $data = DB::select("select
-            idseance,
-            numseance,
-            nom_salle,
-            nom_film,
-            categorie_film,
-            dates,
-            heure
-            from v_getseance
-            limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+            $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
 
             $film = $service->getAll_Film();
             $salle = $service->getAll_Salle();
@@ -208,16 +164,7 @@ class ServiceController extends BaseController
             if (is_integer($numero) == false) {
                 $numero_page = $request->input('page') ?? 1;
                 $nombre_afficher = 5;
-                $data = DB::select("select
-                    idseance,
-                    numseance,
-                    nom_salle,
-                    nom_film,
-                    categorie_film,
-                    dates,
-                    heure
-                    from v_getseance
-                    limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+                $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
 
                 $film = $service->getAll_Film();
                 $salle = $service->getAll_Salle();
@@ -234,17 +181,7 @@ class ServiceController extends BaseController
 
                     $numero_page = $request->input('page') ?? 1;
                     $nombre_afficher = 5;
-                    $data = DB::select("select
-                    idseance,
-                    numseance,
-                    nom_salle,
-                    nom_film,
-                    categorie_film,
-                    dates,
-                    heure
-                    from v_getseance
-                    limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
-
+                    $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
                     $film = $service->getAll_Film();
                     $salle = $service->getAll_Salle();
                     $categorie = $service->getAll_Categorie_Film();
@@ -253,16 +190,7 @@ class ServiceController extends BaseController
                 } else {
                     $numero_page = $request->input('page') ?? 1;
                     $nombre_afficher = 5;
-                    $data = DB::select("select
-                    idseance,
-                    numseance,
-                    nom_salle,
-                    nom_film,
-                    categorie_film,
-                    dates,
-                    heure
-                    from v_getseance
-                    limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+                    $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
                     $message = "seance deja existe !";
                     echo $message;
 

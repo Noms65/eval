@@ -86,8 +86,8 @@ class Service extends Model
             return 1;
         }
     }
-    public function filtre_by($categorie){
-        return DB::select("select * from v_getseance where categorie_film like %?%",[$categorie]);
+    public function filtre_SeanceByCategorie($categorie){
+        return DB::select("select * from v_getseance where categorie_film = ? ",[$categorie]);
     }
 
     public function getClient_ById($id)

@@ -79,6 +79,9 @@ Route::get('/delete_Valid_seance', App\Http\Controllers\ServiceController::class
 // billet
 Route::get('/valider_billet', App\Http\Controllers\ServiceController::class . '@valider_billet')->name('valider_billet');
 
+// Filtre Liste Seance
+Route::get('/filtre_Liste_Seance', App\Http\Controllers\ServiceController::class . '@filtre_Liste_Seance')->name('filtre_Liste_Seance');
+
 // choisir diffusion
 Route::get('/choisir_diffusion', App\Http\Controllers\ServiceController::class . '@choisir_diffusion')->name('choisir_diffusion');
 // apres choix place
