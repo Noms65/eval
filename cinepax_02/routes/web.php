@@ -30,13 +30,9 @@ Route::post('/loginAction', App\Http\Controllers\AuthController::class . '@login
 
 // before
 Route::post('/login', App\Http\Controllers\AuthController::class . '@login');
-// Route::get('/logout', App\Http\Controllers\AuthController::class . '@Deconnexion')->name('Deconnexion');
 
-// After
-// Route::controller(App\Http\Controllers\AuthController::class)->group(function() {
-//     Route::post('login','loginAction');
-//     Route::get('logout','Deconnexion');
-// });
+// $session = session();
+// if(!empty($session->get('idp'))){
 
 // Lien router
 Route::get('/Dashboard', App\Http\Controllers\Controller::class . '@dashboard')->name('dashboard');
@@ -81,6 +77,8 @@ Route::get('/valider_billet', App\Http\Controllers\ServiceController::class . '@
 
 // Filtre Liste Seance
 Route::get('/filtre_Liste_Seance', App\Http\Controllers\ServiceController::class . '@filtre_Liste_Seance')->name('filtre_Liste_Seance');
+// Filtre Update Seance
+Route::get('/filtre_update_seance', App\Http\Controllers\ServiceController::class . '@filtre_update_seance')->name('filtre_update_seance');
 
 // choisir diffusion
 Route::get('/choisir_diffusion', App\Http\Controllers\ServiceController::class . '@choisir_diffusion')->name('choisir_diffusion');
@@ -90,7 +88,7 @@ Route::get('/valider_place', App\Http\Controllers\ServiceController::class . '@v
 Route::get('/valider_info_client', App\Http\Controllers\ServiceController::class . '@valider_info_client')->name('valider_info_client');
 
 Route::post('/upload_csv',App\Http\Controllers\ServiceController::class.'@upload_csv')->name('upload_csv');
-
+// }
 
 // Route::middleware('auth')->group(function(){
 //     Route::get('deconnexion',function(){

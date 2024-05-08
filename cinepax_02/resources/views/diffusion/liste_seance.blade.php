@@ -406,21 +406,24 @@
                 </div>
                 {{-- Filtre  --}}
                 <style>
-                    #filtre_seance{
+                    #filtre_seance {
                         margin-left: 93%;
                         margin-top: -3%;
                     }
                 </style>
 
                 <div class="btn-group" id="filtre_seance">
-                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle">Categories <span class="caret"></span></button>
+                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle">Categories <span
+                            class="caret"></span></button>
                     <ul class="dropdown-menu">
                         @foreach ($liste_categorie as $filtre)
-                      <li><a href="{{ route('filtre_Liste_Seance', ['categorie' => $filtre->categorie]) }}">{{ $filtre->categorie }}</a></li>
-                      <li class="divider"></li>
-                      @endforeach
+                            <li><a
+                                    href="{{ route('filtre_Liste_Seance', ['categorie' => $filtre->categorie]) }}">{{ $filtre->categorie }}</a>
+                            </li>
+                            <li class="divider"></li>
+                        @endforeach
                     </ul>
-                  </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">

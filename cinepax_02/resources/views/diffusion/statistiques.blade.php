@@ -44,12 +44,13 @@
 </head>
 
 <script src="asset_chart/chart.js"></script>
+<script src="asset_pdf/html2pdf.bundle.min.js"></script>
 <script>
     function addPdf() {
-        var element = document.getElementById('content-wrapper');
+        var element = document.getElementById('page-inner');
         element.style.padding = '20px';
         element.style.fontSize = "small";
-        element.style.width = '75%';
+        // element.style.width = '75%';
         html2pdf(element);
     }
 </script>
@@ -317,8 +318,7 @@
                     </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-sitemap"></i> Voir Seance<span
-                                class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-sitemap"></i> Voir Seance<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{ route('liste_seance') }}"><i class="fa fa-edit"></i> Liste Seance </a>
@@ -356,17 +356,18 @@
 
         <!-- /. NAV SIDE  -->
         <div id="page-wrapper">
+            <button onclick="addPdf()" class="btn btn-primary">Pdf</button>
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
                         <h1 class="page-header">
-                            Graph vente<small></small>
+                            Graph vente<small>stat</small>
                         </h1>
                         <div class="container">
                             {{-- <div class="chart-container">
                                 <canvas id="bar-chart"></canvas>
                             </div> --}}
-                            <div class="chart-container">
+                            <div class="chart-container" style="width: 250px; height: 300px;">
                                 <canvas id="pie-chart"></canvas>
                             </div>
                             {{-- <div class="chart-container">
@@ -418,7 +419,10 @@
                                 }]
                             };
 
-
+                            const options = {
+                                responsive: true,
+                                maintainAspectRatio: false // Permet de désactiver le maintien du rapport hauteur/largeur
+                            };
 
                             // const dataLine = {
                             // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -568,7 +572,8 @@
 
                             new Chart(document.getElementById('pie-chart'), {
                                 type: 'pie',
-                                data: dataPie
+                                data: dataPie,
+                                options: options
                             });
 
                             // new Chart(document.getElementById('line-chart'), {
@@ -646,8 +651,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover"
-                                id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
                                         <th>Type Billet</th>
@@ -670,14 +674,14 @@
                                                     Edit</button>
                                             </td>
                                             <td> --}}
-                                                {{-- <button
+                                            {{-- <button
                                                     onclick="deleteSeance('{{ $data->idseance }}','{{ $data->numseance }}','{{ $data->nom_salle }}','{{ $data->nom_film }}','{{ $data->dates }}','{{ $data->heure }}')"
                                                     data-toggle="modal" data-target="#myModal_delete_seance"
                                                     class="btn btn-danger btn-sm">Delete 1
 
                                                 </button> --}}
-                                                {{-- <a href="{{ route('delete_Valid_seance',['idseance'=>$data->idseance]) }}" class="btn btn-danger btn-sm">Delete</a> --}}
-                                                {{-- <button
+                                            {{-- <a href="{{ route('delete_Valid_seance',['idseance'=>$data->idseance]) }}" class="btn btn-danger btn-sm">Delete</a> --}}
+                                            {{-- <button
                                                     onclick="deleteSeance('{{ $data->idseance }}','{{ $data->numseance }}','{{ $data->nom_salle }}','{{ $data->nom_film }}','{{ $data->dates }}','{{ $data->heure }}')"
                                                     data-toggle="modal" data-target="#myModal_delete_seance"
                                                     class="btn btn-danger btn-sm">Delete 1

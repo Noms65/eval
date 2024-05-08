@@ -70,7 +70,7 @@ class AuthController extends Controller
 
                 $session->put('idp', $userList[0]->idusers);
                 $id = $session->get('idp');
-                echo $id;
+                // echo $id;
                 $service = new Service();
                 $list_typeBillet = $service->getType_Billet();
                 $list_billet_one = $service->getBillet();

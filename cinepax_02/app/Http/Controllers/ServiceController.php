@@ -64,19 +64,34 @@ class ServiceController extends BaseController
             return view('diffusion/update_seance/update_seance', ["list_categorie" => $categorie, "list_salle" => $salle, "list_film" => $film, "list_seance" => $data, "currentPage" => $numero_page, "totalPages" => $nombre_afficher]);
         }
     }
+    public function filtre_update_seance(Request $request)
+    {
+        $service = new Service();
+        $numero_page = $request->input('page') ?? 1;
+        $categorie = $request->input('categorie');
+        $nombre_afficher = 5;
+        $data = DB::select("select * from v_getseance where categorie_film = ? limit ? OFFSET (?-1) * ?", [$categorie,$nombre_afficher, $numero_page, $nombre_afficher]);
+
+        $film = $service->getAll_Film();
+        $salle = $service->getAll_Salle();
+        $categorie = $service->getAll_Categorie_Film();
+        $liste_categorie = $service->getCategorie_film();
+
+        return view('diffusion/update_seance/update_seance', ["liste_categorie"=>$liste_categorie,"list_categorie" => $categorie, "list_salle" => $salle, "list_film" => $film, "list_seance" => $data, "currentPage" => $numero_page, "totalPages" => $nombre_afficher]);
+    }
     public function update_seance(Request $request)
     {
         $service = new Service();
         $numero_page = $request->input('page') ?? 1;
         $nombre_afficher = 5;
-        $data = DB::select("
-        select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
+        $data = DB::select("select * from v_getseance limit ? OFFSET (?-1) * ?", [$nombre_afficher, $numero_page, $nombre_afficher]);
 
         $film = $service->getAll_Film();
         $salle = $service->getAll_Salle();
         $categorie = $service->getAll_Categorie_Film();
+        $liste_categorie = $service->getCategorie_film();
 
-        return view('diffusion/update_seance/update_seance', ["list_categorie" => $categorie, "list_salle" => $salle, "list_film" => $film, "list_seance" => $data, "currentPage" => $numero_page, "totalPages" => $nombre_afficher]);
+        return view('diffusion/update_seance/update_seance', ["liste_categorie"=>$liste_categorie,"list_categorie" => $categorie, "list_salle" => $salle, "list_film" => $film, "list_seance" => $data, "currentPage" => $numero_page, "totalPages" => $nombre_afficher]);
     }
     public function pagination_seance(Request $request)
     {
@@ -400,19 +415,19 @@ class ServiceController extends BaseController
         $file = \request()->file('fichier');
         $fileContents = file($file->getPathname());
         $function = new Generalisation();
-        $lineNumber = 0; // Ajout d'un compteur de lignes
+        $lineNumber = 0;
         foreach ($fileContents as $line) {
-            $lineNumber++; // Incrémenter le numéro de ligne
+            $lineNumber++;
             $record = str_getcsv($line);
 
             $list_date = $service->getControlle_Date($record[4]);
             $valid_date = $service->Is_DateValid($record[4]);
 
             if ($valid_date == 0) {
-                $error_message = 'Erreur de date à la ligne ' . $lineNumber . ': ' . $line . ' -> ' . $record[4];
+                $error_message = 'Erreur de date à la ligne ' . $lineNumber . ': ' . $line . ' --> ' . $record[4];
                 // echo $error_message;
                 array_push($errors_list, $error_message);
-                $list_date = ($valid_date == 0) ? null : $list_date;
+                // $list_date = ($valid_date == 0) ? null : $list_date;
                 // echo 'valeur date' . $list_date;
             }
 
@@ -423,13 +438,19 @@ class ServiceController extends BaseController
                 $error_message = 'Erreur heure à la ligne ' . $lineNumber . ': ' . $line . ' -> ' . $record[5];
                 // echo $error_message;
                 array_push($errors_list, $error_message);
-                $list_heure = ($valid_heure == 0) ? null : $list_heure;
+                // $list_heure = ($valid_heure == 0) ? null : $list_heure;
                 // echo $list_heure;
             }
-
-            DB::insert('insert into data_csv (numseance, film,categorie,salle,date,heure) values (?,?,?,?,?,?)', [$record[0], $record[1], $record[2], $record[3], $list_date, $list_heure]);
+            if(empty($errors_list)){
+                DB::insert('insert into data_csv (numseance, film,categorie,salle,date,heure) values (?,?,?,?,?,?)', [$record[0], $record[1], $record[2], $record[3], $list_date, $list_heure]);
+            }
             // $function->inserts('data_csv', ['numseance' => $record[0], 'film' => $record[1], 'categorie' => $record[2], 'salle' => $record[3], 'Date' => $record[4], 'Heure' => $record[5]]);
         }
+
+        if(!empty($errors_list)){
+            return redirect()->route('Importcsv')->with('message',$errors_list);
+        }
+
         $salle = DB::select("select salle from data_csv group by salle");
         $film = DB::select("select film from data_csv group by film");
         $categorie_film = DB::select("select categorie from data_csv group by categorie");

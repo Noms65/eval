@@ -404,7 +404,7 @@
                             </div>
                         </div>
                         @if (!empty($message))
-                            <div>
+                            <div class="alert alert-danger">
                                 @foreach ($message as $messages)
                                     <li>{{ $messages }}</li>
                                 @endforeach

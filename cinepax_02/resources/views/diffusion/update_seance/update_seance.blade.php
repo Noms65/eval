@@ -584,13 +584,32 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+                {{-- Filtre  --}}
+                <style>
+                    #filtre_seance {
+                        margin-left: 92%;
+                        margin-top: -1%;
+                    }
+                </style>
 
+                <div class="btn-group" id="filtre_seance">
+                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle">Categories <span
+                            class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        @foreach ($liste_categorie as $filtre)
+                            <li><a
+                                    href="{{ route('filtre_update_seance', ['categorie' => $filtre->categorie]) }}">{{ $filtre->categorie }}</a>
+                            </li>
+                            <li class="divider"></li>
+                        @endforeach
+                    </ul>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Advanced Tables -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4>Liste Seances</h4>
+                                <h4>Seances</h4>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">

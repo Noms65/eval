@@ -123,7 +123,7 @@ class Service extends Model
     public function getBillet()
     {
         $function = new Generalisation();
-        return $function->select("billet", ["*"], ["dispo" => "true"], [], ['limit' => 1]);
+        return $function->select("billet", ["*"], ["dispo" => "true"], ['numero'=>'asc'], ['limit' => 1]);
     }
     public function getCategorie_film()
     {
